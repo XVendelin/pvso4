@@ -53,3 +53,5 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
 
     kmeans = KMeans(n_clusters=k, random_state=0).fit(outlier_points)
     labels = kmeans.labels_
+
+---

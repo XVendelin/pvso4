@@ -30,6 +30,8 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
   birch = Birch(n_clusters=k, threshold=0.5, branching_factor=100)
   labels = birch.fit_predict(outlier_points)
 
+---
+
 ## K-means
 
 - **Čo je K-means?**

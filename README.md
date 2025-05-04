@@ -92,7 +92,18 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply` alebo `.pcd`, vyh
 
 ## Vizualizácia výsledkov
 
-Nasledujúci obrázok ukazuje príklad vizualizácie bodového mraku po klasifikácii:
+Nasledujúci obrázok ukazuje príklad vizualizácie bodového mraku po nasnímaní z kinect a vymazaní NaN hodnôt:
 
 ![Vizualizácia bodového mraku](./1.png)
 
+Ďalší obrázok ukazuje príklad vizualizácie bodového mraku po použití ransac algoritmu:
+
+![Vizualizácia bodového mraku](./2.png)
+
+Vyzualizácia K-means:
+
+![Vizualizácia bodového mraku](./3.png)
+
+vyzualizácia Birch:
+
+![Vizualizácia bodového mraku](./4.png)

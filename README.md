@@ -15,10 +15,27 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
 
 ## BIRCH
 
-1. **`Birch(n_clusters=3):`**  
+1. **`Birch(n_clusters=3, threshold=0.07, branching_factor=100):`**  
    Tento riadok vytvorí inštanciu triedy `Birch` z knižnice `sklearn.cluster` a určuje, že chceme rozdeliť dáta do 3 klastrov.
 
    - `n_clusters=3`: Určuje počet klastrov, ktoré má algoritmus BIRCH nájsť (3 klastry vo vašom prípade).
+
+   **Parametre:**
+   - **`n_clusters=k:`**  
+     Tento parameter určuje počet klastrov, ktoré algoritmus BIRCH má nájsť po vykonaní zoskupovania.  
+     - `k`: Môže to byť akákoľvek hodnota, ktorá určuje požadovaný počet klastrov. Ak je hodnota `n_clusters=k`, algoritmus sa pokúsi rozdeliť dáta na `k` klastrov.  
+     - Ak je `n_clusters` nastavené na `None`, algoritmus bude pokračovať v procesoch zoskupovania, až kým sa počet klastrov nestabilizuje podľa iných parametrov.
+
+   - **`threshold=0.07:`**  
+     `threshold` určuje maximálnu vzdialenosť, akú môže mať bod od centrálnej hodnoty mikroklastra (Centroidu) predtým, než bude priradený k novému mikroklastru.  
+     - Tento parameter riadi, ako „tesne“ sa budú mikroklastre držať pohromade.  
+     - Nižšia hodnota znamená prísnejšie kritériá na to, aby sa bod priradil k existujúcemu mikroklastru, čo môže viesť k väčšiemu počtu mikroklastrov.  
+     - Vyššia hodnota znamená, že bod môže byť priradený k širšiemu rozsahu mikroklastrov, čím sa zníži počet mikroklastrov, ale môže to spôsobiť, že sa niektoré klastre budú miešať.
+
+   - **`branching_factor=100:`**  
+     `branching_factor` určuje maximálny počet podstromov, ktoré môže obsahovať každý uzol v CF Tree (Cluster Feature Tree), ktorý BIRCH používa na reprezentáciu klastrov.  
+     - Vyššia hodnota umožňuje väčšie podstromy, čím sa znižuje počet uzlov a zjednodušuje hierarchia stromu.  
+     - Nižšia hodnota spôsobí, že strom bude mať viac úrovní a uzlov, čo môže spomaliť výpočty, ale zvýši flexibilitu v spracovaní dát.
 
 2. **`.fit(outlier_points):`**  
    Metóda `.fit()` aplikuje algoritmus BIRCH na naše dáta (`outlier_points`).

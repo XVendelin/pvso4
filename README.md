@@ -34,24 +34,57 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
 
 ## K-means
 
-- **Čo je K-means?**
-    K-means je klasický a veľmi rozšírený algoritmus na klastrovanie dát. Cieľom je rozdeliť body do k skupín tak, aby boli čo najbližšie k svojmu centroidu (stredu klastra). Algoritmus opakovane priraďuje body k najbližšiemu centroidu a aktualizuje polohy centroidov, až kým sa nezmení priradenie bodov.
+- **Čo je K-means?**  
+  K-means je iteratívny algoritmus používaný na klastrovanie dát. Jeho cieľom je rozdeliť \( n \) dátových bodov do \( K \) zhlukov (klastrov), kde body v rámci jedného zhluku sú čo najbližšie k svojmu centroidu (stredu zhluku). Algoritmus funguje na princípe opakovaného priraďovania bodov k najbližšiemu centroidu a aktualizovania polôh centroidov, až kým sa priradenie bodov nezmení alebo sa nedosiahne stanovený počet iterácií.
+
+- **Hlavné premenné:**
+    - **\( K \)** – počet zhlukov (určuješ ty).
+    - **\( X = \{x_1, x_2, ..., x_n\} \)** – množina vstupných dátových bodov.
+    - **\( \mu_1, \mu_2, ..., \mu_K \)** – centroidy (stredy zhlukov).
+    - **\( C(i) \in \{1, ..., K\} \)** – priradenie dátového bodu \( x_i \) ku konkrétnemu zhluku.
+
+- **Algoritmus (iteratívny proces):**
+    1. **Inicializácia centier zhlukov:**  
+       Vyber náhodne \( K \) dátových bodov ako počiatočné centroidy \( \mu_1, ..., \mu_K \).
+    
+    2. **Priraďovanie bodov ku zhlukom:**  
+       Pre každý bod \( x_i \) nájdi najbližší centroid \( \mu_j \), podľa euklidovskej vzdialenosti:
+       $$
+       C(i) = \arg\min_{j \in \{1, ..., K\}} \left\| x_i - \mu_j \right\|^2
+       $$
+
+    3. **Aktualizácia centroidov:**  
+       Pre každý zhluk \( j \), vypočítaj nový centroid ako priemer všetkých bodov priradených do tohto zhluku:
+       $$
+       \mu_j = \frac{1}{|S_j|} \sum_{x_i \in S_j} x_i
+       $$
+       kde \( S_j = \{ x_i : C(i) = j \} \) je množina bodov priradených k zhluku \( j \).
+
+    4. **Opakovanie:**  
+       Kroky 2 a 3 opakuj, až kým sa priradenie bodov nezmení, alebo sa nedosiahne stanovený počet iterácií.
 
 - **Výhody:**
-    - Extrémne rýchly pri menších a stredne veľkých datasetoch.
-    - Jednoduchá implementácia a použitie.
-    - Vhodný pre dáta, kde sú klastre približne guľovité a rovnakých veľkostí.
+    - Jednoduchý a rýchly na menších a stredne veľkých datasetoch.
+    - Intuitívne výsledky pre dobre oddelené zhluky.
+    - Relatívne jednoduchá implementácia.
 
 - **Nevýhody:**
-    - Menej efektívny pri veľkých a veľmi nerovnomerných datasetoch.
-    - Musí sa vopred určiť počet klastrov k.
+    - Musíš vopred určiť počet zhlukov \( K \).
+    - Citlivý na počiatočné hodnoty centroidov (môže to viesť k rôznym výsledkom pri rôznych inicializáciách).
+    - Citlivý na odľahlé hodnoty (outliers).
+    - Predpokladá, že zhluky majú guľový tvar a rovnakú veľkosť, čo nie je vždy pravda.
 
-- **Použitie v kóde:**
-    Ak chceš použiť K-means namiesto BIRCH, stačí odkomentovať tieto riadky:
-    ```python
-    from sklearn.cluster import KMeans
+- **Použitie v kóde:**  
+  Ak chceš použiť **K-means** v Python-e, môžeš využiť knižnicu `scikit-learn`. Tu je ukážka kódu:
 
-    kmeans = KMeans(n_clusters=k, random_state=0).fit(outlier_points)
-    labels = kmeans.labels_
+  ```python
+  from sklearn.cluster import KMeans
 
----
+  # Predpokladáme, že máš vstupné dáta v premennej `data`
+  kmeans = KMeans(n_clusters=K, random_state=0).fit(data)
+
+  # Získanie priradení bodov k zhlukom
+  labels = kmeans.labels_
+
+  # Získanie centroidov
+  centroids = kmeans.cluster_centers_

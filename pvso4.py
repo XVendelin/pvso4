@@ -5,19 +5,20 @@ from sklearn.cluster import Birch
 
 
 # Load the point cloud
-pcd = o3d.io.read_point_cloud("Carola_PointCloud.ply")
+pcd = o3d.io.read_point_cloud("output2.pcd")
 print("Original number of points:", len(pcd.points))
 
 # Segment the largest plane
-plane_model, inliers = pcd.segment_plane(distance_threshold=5,
+plane_model, inliers = pcd.segment_plane(distance_threshold=0.2,
                                          ransac_n=3,
-                                         num_iterations=1000)
+                                         num_iterations=8000)
 
 # Separate inliers and outliers
 outlier_cloud = pcd.select_by_index(inliers)
 
 # Convert outlier point cloud to numpy array
 outlier_points = np.asarray(outlier_cloud.points)
+print("Number of points after processing:", len(outlier_points))
 
 # Odstráni riadky s NaN hodnotami
 outlier_points = outlier_points[~np.isnan(outlier_points).any(axis=1)]
@@ -28,7 +29,7 @@ kmeans = KMeans(n_clusters=k, random_state=0).fit(outlier_points)
 labels = kmeans.labels_
 
 # Apply birch to the outliers
-birch = Birch(n_clusters=k, threshold=0.5, branching_factor=100)
+birch = Birch(n_clusters=k, threshold=0.07, branching_factor=100)
 labels1 = birch.fit_predict(outlier_points)
 
 

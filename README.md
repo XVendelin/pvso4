@@ -15,76 +15,59 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
 
 ## BIRCH
 
-- **Čo je BIRCH?**  
-  BIRCH (Balanced Iterative Reducing and Clustering using Hierarchies) je algoritmus vhodný pre veľmi veľké datasety. Pracuje rýchlo a efektívne tým, že buduje kompaktnú hierarchickú štruktúru bodov už počas načítania dát.
+1. **`Birch(n_clusters=3):`**  
+   Tento riadok vytvorí inštanciu triedy `Birch` z knižnice `sklearn.cluster` a určuje, že chceme rozdeliť dáta do 3 klastrov.
 
-- **Výhody:**  
-  - Lepšie škáluje na milióny bodov.
-  - Pamäťovo úspornejší.
-  - Automaticky agreguje podobné body do clusterov.
+   - `n_clusters=3`: Určuje počet klastrov, ktoré má algoritmus BIRCH nájsť (3 klastry vo vašom prípade).
 
-- **Použitie v kóde:**  
-  Predvolený algoritmus je BIRCH. Klastruje outliery podľa počtu klastrov `k`:
-  
-  ```python
-  birch = Birch(n_clusters=k, threshold=0.5, branching_factor=100)
-  labels = birch.fit_predict(outlier_points)
+2. **`.fit(outlier_points):`**  
+   Metóda `.fit()` aplikuje algoritmus BIRCH na vaše dáta (`outlier_points`).
+
+   - **Ako funguje algoritmus BIRCH:**
+     - **Mikroklastre (Microclusters):** Algoritmus začína tým, že rozdelí dáta na malé mikroklastre. Každý mikroklaster je reprezentovaný centroidom a ďalšími štatistikami ako priemer a rozptyl.
+     - **CF Tree (Cluster Feature Tree):** Potom vytvorí hierarchickú štruktúru známa ako CF Tree, ktorá efektívne uchováva informácie o mikroklastroch.
+     - **Zoskupovanie:** Algoritmus postupne priraďuje mikroklastre do väčších klastrov a vytvára konečnú štruktúru klastrov na základe týchto agregovaných informácií.
+     - **Iterácia:** Tento proces prebieha v iteráciách, kde algoritmus postupne zoskupuje mikroklastre do väčších, a to všetko za použitia hierarchickej štruktúry, ktorá optimalizuje výpočty.
+   - **Výsledok:** Po dokončení `.fit()` má model BIRCH uložené priradenia bodov do klastrov a informácie o mikroklastroch a ich centroidoch.
+
+3. **`labels = birch.labels_:`**  
+   Po natrénovaní modelu obsahuje `birch.labels_` priradenia jednotlivých dátových bodov do klastrov.
+
+   - `labels_`: Je to pole (zoznam), kde každá položka udáva, do ktorého klastru bol daný dátový bod zaradený. Napr. ak máte 10 bodov a `n_clusters=3`, pole `labels_` bude obsahovať hodnoty `0`, `1` alebo `2`, podľa toho, do ktorého z troch klastrov patrí daný bod.
+
+---
+
+### Zhrnutie:
+- **`Birch(n_clusters=3):`** Inicializuje algoritmus BIRCH na rozdelenie dát do 3 klastrov.
+- **`.fit(outlier_points):`** Spustí BIRCH algoritmus na vašich dátach a vykoná zoskupovanie pomocou mikroklastrov a CF Tree.
+- **`birch.labels_:`** Vracia priradenia dátových bodov do klastrov (t. j. ktorý bod patrí do ktorého klastru).
 
 ---
 
 ## K-means
 
-- **Čo je K-means?**  
-  K-means je iteratívny algoritmus používaný na klastrovanie dát. Jeho cieľom je rozdeliť \( n \) dátových bodov do \( K \) zhlukov (klastrov), kde body v rámci jedného zhluku sú čo najbližšie k svojmu centroidu (stredu zhluku). Algoritmus funguje na princípe opakovaného priraďovania bodov k najbližšiemu centroidu a aktualizovania polôh centroidov, až kým sa priradenie bodov nezmení alebo sa nedosiahne stanovený počet iterácií.
+1. **`KMeans(n_clusters=k, random_state=0):`**
+   - Tento riadok vytvorí inštanciu triedy `KMeans` z knižnice `sklearn.cluster` a určuje, že chceme rozdeliť dáta do `k` klastrov (v tomto prípade `k=3`).
+   - `n_clusters=k`: Určuje počet klastrov, ktoré má algoritmus nájsť (3 klastry vo vašom prípade).
+   - `random_state=0`: Zabezpečuje, že náhodná inicializácia centroidov bude reprodukovateľná – výsledky budú rovnaké pri každom spustení kódu.
 
-- **Hlavné premenné:**
-    - **\( K \)** – počet zhlukov (určuješ ty).
-    - **\( X = \{x_1, x_2, ..., x_n\} \)** – množina vstupných dátových bodov.
-    - **\( \mu_1, \mu_2, ..., \mu_K \)** – centroidy (stredy zhlukov).
-    - **\( C(i) \in \{1, ..., K\} \)** – priradenie dátového bodu \( x_i \) ku konkrétnemu zhluku.
+2. **`.fit(outlier_points):`**
+   - Metóda `.fit()` aplikuje K-means algoritmus na vaše dáta (`outlier_points`).
+   - **Ako funguje K-means algoritmus:**
+     - **Náhodná inicializácia:** Začne náhodným výberom `k=3` počiatočných centroidov z vašich dátových bodov.
+     - **Fáza priradenia:** Každý bod sa priradí k najbližšiemu centroidu (na základe euklidovskej vzdialenosti).
+     - **Fáza aktualizácie:** Po priradení všetkých bodov sa centroidy prepočítajú ako priemer všetkých bodov v každom klastri.
+     - **Iterácia:** Tento proces (priraďovanie bodov + prepočítanie centroidov) sa opakuje, až kým sa centroidy prestanú výrazne meniť (t. j. dosiahne sa konvergencia), alebo sa dosiahne maximálny počet iterácií.
+   - **Výsledok:** Po dokončení `.fit()` má model (`kmeans`) uložené priradenia do klastrov aj súradnice centroidov.
 
-- **Algoritmus (iteratívny proces):**
-    1. **Inicializácia centier zhlukov:**  
-       Vyber náhodne \( K \) dátových bodov ako počiatočné centroidy \( \mu_1, ..., \mu_K \).
-    
-    2. **Priraďovanie bodov ku zhlukom:**  
-       Pre každý bod \( x_i \) nájdi najbližší centroid \( \mu_j \), podľa euklidovskej vzdialenosti:
-       $$
-       C(i) = \arg\min_{j \in \{1, ..., K\}} \left\| x_i - \mu_j \right\|^2
-       $$
+3. **`labels = kmeans.labels_:`**
+   - Po natrénovaní modelu obsahuje `kmeans.labels_` priradenia jednotlivých dátových bodov do klastrov.
+   - `labels_`: Je to pole (zoznam), kde každá položka udáva, do ktorého klastru bol daný dátový bod zaradený. Napr. ak máte 10 bodov a `k=3`, pole `labels_` bude obsahovať hodnoty `0`, `1` alebo `2`, podľa toho, do ktorého z troch klastrov patrí daný bod.
 
-    3. **Aktualizácia centroidov:**  
-       Pre každý zhluk \( j \), vypočítaj nový centroid ako priemer všetkých bodov priradených do tohto zhluku:
-       $$
-       \mu_j = \frac{1}{|S_j|} \sum_{x_i \in S_j} x_i
-       $$
-       kde \( S_j = \{ x_i : C(i) = j \} \) je množina bodov priradených k zhluku \( j \).
+---
 
-    4. **Opakovanie:**  
-       Kroky 2 a 3 opakuj, až kým sa priradenie bodov nezmení, alebo sa nedosiahne stanovený počet iterácií.
+### Zhrnutie:
+- **`KMeans(n_clusters=k):`** Inicializuje K-means algoritmus na rozdelenie dát do 3 klastrov.
+- **`.fit(outlier_points):`** Spustí K-means na vašich dátach a vykoná zoskupovanie.
+- **`kmeans.labels_:`** Vracia priradenia dátových bodov do klastrov (t. j. ktorý bod patrí do ktorého klastru).
 
-- **Výhody:**
-    - Jednoduchý a rýchly na menších a stredne veľkých datasetoch.
-    - Intuitívne výsledky pre dobre oddelené zhluky.
-    - Relatívne jednoduchá implementácia.
-
-- **Nevýhody:**
-    - Musíš vopred určiť počet zhlukov \( K \).
-    - Citlivý na počiatočné hodnoty centroidov (môže to viesť k rôznym výsledkom pri rôznych inicializáciách).
-    - Citlivý na odľahlé hodnoty (outliers).
-    - Predpokladá, že zhluky majú guľový tvar a rovnakú veľkosť, čo nie je vždy pravda.
-
-- **Použitie v kóde:**  
-  Ak chceš použiť **K-means** v Python-e, môžeš využiť knižnicu `scikit-learn`. Tu je ukážka kódu:
-
-  ```python
-  from sklearn.cluster import KMeans
-
-  # Predpokladáme, že máš vstupné dáta v premennej `data`
-  kmeans = KMeans(n_clusters=K, random_state=0).fit(data)
-
-  # Získanie priradení bodov k zhlukom
-  labels = kmeans.labels_
-
-  # Získanie centroidov
-  centroids = kmeans.cluster_centers_

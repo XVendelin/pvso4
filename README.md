@@ -1,6 +1,6 @@
 # Klasifikácia bodového mraku pomocou BIRCH alebo K-means
 
-Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odstráni najväčšiu rovinu (napr. zem, stenu) a zvyšné body rozdelí do klastrov pomocou jedného z dvoch algoritmov: **BIRCH** alebo **K-means**. Výsledné klastre sú vizualizované rôznymi farbami.
+Tento Python skript načíta 3D bodový mrak zo súboru `.ply` alebo `.pcd`, vyhľadá a odstráni najväčšiu rovinu (napr. zem, stenu) a zvyšné body rozdelí do klastrov pomocou jedného z dvoch algoritmov: **BIRCH** alebo **K-means**. Výsledné klastre sú vizualizované rôznymi farbami.
 
 ## Čo skript robí
 

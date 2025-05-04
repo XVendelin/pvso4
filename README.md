@@ -88,3 +88,11 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply` alebo `.pcd`, vyh
 - **`.fit(outlier_points):`** Spustí K-means na vašich dátach a vykoná zoskupovanie.
 - **`kmeans.labels_:`** Vracia priradenia dátových bodov do klastrov (t. j. ktorý bod patrí do ktorého klastru).
 
+---
+
+## Vizualizácia výsledkov
+
+Nasledujúci obrázok ukazuje príklad vizualizácie bodového mraku po klasifikácii:
+
+![Vizualizácia bodového mraku](./1.png)
+

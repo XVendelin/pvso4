@@ -21,7 +21,7 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
    - `n_clusters=3`: Určuje počet klastrov, ktoré má algoritmus BIRCH nájsť (3 klastry vo vašom prípade).
 
 2. **`.fit(outlier_points):`**  
-   Metóda `.fit()` aplikuje algoritmus BIRCH na vaše dáta (`outlier_points`).
+   Metóda `.fit()` aplikuje algoritmus BIRCH na naše dáta (`outlier_points`).
 
    - **Ako funguje algoritmus BIRCH:**
      - **Mikroklastre (Microclusters):** Algoritmus začína tým, že rozdelí dáta na malé mikroklastre. Každý mikroklaster je reprezentovaný centroidom a ďalšími štatistikami ako priemer a rozptyl.
@@ -52,7 +52,7 @@ Tento Python skript načíta 3D bodový mrak zo súboru `.ply`, vyhľadá a odst
    - `random_state=0`: Zabezpečuje, že náhodná inicializácia centroidov bude reprodukovateľná – výsledky budú rovnaké pri každom spustení kódu.
 
 2. **`.fit(outlier_points):`**
-   - Metóda `.fit()` aplikuje K-means algoritmus na vaše dáta (`outlier_points`).
+   - Metóda `.fit()` aplikuje K-means algoritmus na naše dáta (`outlier_points`).
    - **Ako funguje K-means algoritmus:**
      - **Náhodná inicializácia:** Začne náhodným výberom `k=3` počiatočných centroidov z vašich dátových bodov.
      - **Fáza priradenia:** Každý bod sa priradí k najbližšiemu centroidu (na základe euklidovskej vzdialenosti).

@@ -29,7 +29,7 @@ kmeans = KMeans(n_clusters=k, random_state=0).fit(outlier_points)
 labels = kmeans.labels_
 
 # Apply birch to the outliers
-birch = Birch(n_clusters=k, threshold=0.07, branching_factor=100)
+birch = Birch(n_clusters=k, threshold=0.1, branching_factor=500)
 labels1 = birch.fit_predict(outlier_points)
 
 

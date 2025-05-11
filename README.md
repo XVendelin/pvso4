@@ -107,3 +107,51 @@ Vyzualizácia K-means:
 vyzualizácia Birch:
 
 ![Vizualizácia bodového mraku](./4.png)
+
+## Funkcia: filter_small_clusters
+
+### Účel funkcie
+Táto funkcia preusporiada označenia klastrov pre body patriace do malých klastrov (s menším počtom bodov, ako je hodnota `min_points`) a označí ich ako šum (`-1`).
+
+### Parametre
+- **`labels:`** Zoznam alebo pole celých čísel, ktoré reprezentujú priradenie klastrov pre každý bod. Označenie `-1` zvyčajne indikuje šum (t. j. body, ktoré neboli priradené do žiadneho klastra).
+- **`min_points:`** Minimálny počet bodov, ktoré musí klaster obsahovať, aby bol považovaný za platný klaster. Predvolená hodnota je `300`.
+
+### Postup krok za krokom
+
+1. **Spočítanie bodov v jednotlivých klastroch:**
+
+   ```python
+   cluster_counts = Counter(labels)
+   ```
+   Tento krok vytvorí slovník, kde kľúče sú označenia klastrov a hodnoty predstavujú počet bodov v každom klastri.
+
+2. **Odstránenie šumu (`-1`) zo štatistiky:**
+
+   ```python
+   if -1 in cluster_counts:
+       del cluster_counts[-1]
+   ```
+   Body, ktoré už boli označené ako šum, sú vylúčené z ďalšieho spracovania.
+
+3. **Identifikácia platných klastrov:**
+
+   ```python
+   valid_cluster_labels = [label for label, count in cluster_counts.items() if count >= min_points]
+   ```
+   Tento krok vytvorí zoznam klastrov, ktoré spĺňajú prahovú hodnotu `min_points`.
+
+4. **Preznačenie bodov z malých klastrov ako šum (`-1`):**
+
+   ```python
+   updated_labels = np.array([
+       label if label in valid_cluster_labels else -1
+       for label in labels
+   ])
+   ```
+   Každé označenie je skontrolované:
+   - Ak patrí do platného klastra, zostáva nezmenené.
+   - Ak patrí do malého klastra alebo je už označené ako šum, nastaví sa na `-1`.
+
+### Výstup
+Funkcia vráti pole typu NumPy, kde body z malých klastrov boli odfiltrované a označené ako šum.

@@ -13,18 +13,22 @@ plane_model, inliers = pcd.segment_plane(distance_threshold=0.2,
                                          ransac_n=3,
                                          num_iterations=8000)
 
+
 # Separate inliers and outliers
 outlier_cloud = pcd.select_by_index(inliers)
 
+outlier_cloud, ind = outlier_cloud.remove_statistical_outlier(nb_neighbors=50, std_ratio=1)
+
 # Convert outlier point cloud to numpy array
 outlier_points = np.asarray(outlier_cloud.points)
+
 print("Number of points after processing:", len(outlier_points))
 
 # Odstráni riadky s NaN hodnotami
 outlier_points = outlier_points[~np.isnan(outlier_points).any(axis=1)]
 
 # Apply K-means to the outliers
-k = 3  # počet klastrov
+k = 2  # počet klastrov
 kmeans = KMeans(n_clusters=k, random_state=0).fit(outlier_points)
 labels = kmeans.labels_
 

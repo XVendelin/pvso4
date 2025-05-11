@@ -197,3 +197,9 @@ DBSCAN je výkonný algoritmus na klastrovanie, ktorý zoskupuje body, ktoré s�
 
 4. **Označenie zostávajúcich bodov:**
    - Ak bod nie je jadrovým bodom a nie je dosiahnuteľný z akéhokoľvek jadrového bodu, je označený ako šum (`-1`).
+
+vyzualizácia DBscan:
+
+![Vizualizácia bodového mraku](./5.png)
+DBSCAN found 1 clusters
+Noise points: 87668 (69.26% of total)

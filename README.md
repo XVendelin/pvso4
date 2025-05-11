@@ -201,5 +201,7 @@ DBSCAN je výkonný algoritmus na klastrovanie, ktorý zoskupuje body, ktoré s�
 vyzualizácia DBscan:
 
 ![Vizualizácia bodového mraku](./5.png)
+
 DBSCAN found 1 clusters
+
 Noise points: 87668 (69.26% of total)

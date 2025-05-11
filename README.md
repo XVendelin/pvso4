@@ -155,3 +155,45 @@ Táto funkcia preusporiada označenia klastrov pre body patriace do malých klas
 
 ### Výstup
 Funkcia vráti pole typu NumPy, kde body z malých klastrov boli odfiltrované a označené ako šum.
+
+## Zmenšenie počtu bodov v objekte
+
+### voxel_size=0.13:
+Tento parameter definuje veľkosť každého voxelu (kocky s dĺžkou hrany 0.13 jednotiek).
+
+- Všetky body, ktoré spadajú do rovnakého voxelu, sú zlúčené do jedného bodu.
+
+### voxel_down_sample():
+Táto metóda iteruje cez bodový mrak.
+
+1. **Vytvorenie 3D voxelovej mriežky:**
+   - Bodový mrak je rozdelený na malé kocky (voxely) podľa zadaného voxel_size.
+
+2. **Výpočet reprezentatívneho bodu:**
+   - Pre každý obsadený voxel sa vypočíta reprezentatívny bod (napr. centroid) a zahrnie sa do zmenšeného bodového mraku.
+
+### Výsledok
+Použitím tejto metódy sa zníži počet bodov v bodovom mraku, čo zjednoduší ďalšie spracovanie a vizualizáciu.
+
+## DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
+
+DBSCAN je výkonný algoritmus na klastrovanie, ktorý zoskupuje body, ktoré sú husto zoskupené, a označuje body v oblastiach s nízkou hustotou ako šum. Je obzvlášť užitočný na hľadanie klastrov ľubovoľného tvaru a filtrovanie odľahlých bodov.
+
+### Kľúčové parametre
+- **`eps (epsilon):`** Polomer okolia okolo bodu.
+- **`min_samples:`** Minimálny počet bodov potrebných na vytvorenie hustej oblasti (t. j. klastra).
+
+### Ako DBSCAN funguje
+
+1. **Výber neprejdeného bodu:**
+   - Ak má bod aspoň `min_samples` bodov (vrátane seba) v rámci vzdialenosti `eps`, je to jadrový bod a začína sa nový klaster.
+
+2. **Rozšírenie klastra:**
+   - Všetky body v rámci `eps` od jadrového bodu sa pridajú do klastra.
+   - Pre každý z týchto bodov, ak sú tiež jadrovými bodmi, proces sa opakuje (t. j. klaster sa ďalej rozširuje).
+
+3. **Pokračovanie:**
+   - Pokračuje sa, kým sa do klastra nepridajú všetky dosiahnuteľné body.
+
+4. **Označenie zostávajúcich bodov:**
+   - Ak bod nie je jadrovým bodom a nie je dosiahnuteľný z akéhokoľvek jadrového bodu, je označený ako šum (`-1`).

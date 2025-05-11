@@ -203,5 +203,6 @@ vyzualizácia DBscan:
 ![Vizualizácia bodového mraku](./5.png)
 
 DBSCAN found 1 clusters
+Number of points after processing: 126587
 
 Noise points: 87668 (69.26% of total)
